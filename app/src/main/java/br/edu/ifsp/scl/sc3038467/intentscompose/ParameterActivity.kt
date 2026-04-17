@@ -40,3 +40,50 @@ class ParameterActivity : ComponentActivity() {
         }
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ParameterScreen(
+    parameterText: String,
+    onParameterChange: (String) -> Unit,
+    onSaveAndQuitClick: () -> Unit,
+    title: String,
+    subtitle: String
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Column {
+                        Text(text = title)
+                        Text(text = subtitle, style = MaterialTheme.typography.bodySmall)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp)
+        ) {
+            TextField(
+                value = parameterText,
+                onValueChange = onParameterChange,
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = LocalTextStyle.current.copy(fontSize = 24.sp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = onSaveAndQuitClick,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Save and quit")
+            }
+        }
+    }
+}

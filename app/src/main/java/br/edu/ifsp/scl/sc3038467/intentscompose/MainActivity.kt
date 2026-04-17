@@ -10,19 +10,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import br.edu.ifsp.scl.sc3038467.intentscompose.ui.theme.IntentsComposeTheme
-
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import android.Manifest.permission.CALL_PHONE
 import android.content.Intent
 import android.content.Intent.ACTION_CALL
@@ -112,6 +99,80 @@ class MainActivity : ComponentActivity() {
         Intent(if (call) ACTION_CALL else ACTION_DIAL).apply {
             data = Uri.parse("tel: $phoneNumber")
             startActivity(this)
+        }
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainScreen(
+    parameterText: String,
+    onSetParameterClick: () -> Unit,
+    onViewClick: () -> Unit,
+    onDialClick: () -> Unit,
+    onCallClick: () -> Unit,
+    title: String,
+    subtitle: String
+) {
+    var menuExpanded by remember { mutableStateOf(false) }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Column {
+                        Text(text = title)
+                        Text(text = subtitle, style = MaterialTheme.typography.bodySmall)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                actions = {
+                    IconButton(onClick = onSetParameterClick) {
+                        Icon(
+                            imageVector = Icons.Default.PostAdd,
+                            contentDescription = "Set Parameter"
+                        )
+                    }
+
+                    IconButton(onClick = { menuExpanded = true }) {
+                        Icon(Icons.Default.MoreVert, contentDescription = "Menu")
+                    }
+
+                    DropdownMenu(
+                        expanded = menuExpanded,
+                        onDismissRequest = { menuExpanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("View") },
+                            onClick = { menuExpanded = false; onViewClick() }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Dial") },
+                            onClick = { menuExpanded = false; onDialClick() }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Call") },
+                            onClick = { menuExpanded = false; onCallClick() }
+                        )
+                    }
+                }
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp)
+        ) {
+            Text(
+                text = parameterText,
+                fontSize = 24.sp,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }

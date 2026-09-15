@@ -18,7 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AddWordScreen(modifier: Modifier = Modifier) {
+fun AddWordScreen(modifier: Modifier = Modifier,
+                  textoRecebido: String,
+                  onConcatenarClick: (String) -> Unit) {
 
     var novaPalavra by remember { mutableStateOf("") }
 
@@ -26,7 +28,7 @@ fun AddWordScreen(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize().padding(16.dp),
     ) {
         OutlinedTextField(
-            value = "",
+            value = textoRecebido,
             onValueChange = { },
             readOnly = true,
             label = { Text("Texto atual") },
@@ -35,13 +37,13 @@ fun AddWordScreen(modifier: Modifier = Modifier) {
 
         OutlinedTextField(
             value = novaPalavra,
-            onValueChange = {},
+            onValueChange = { novaPalavra = it},
             label = { Text("Digite a nova palavra") },
             modifier = Modifier.fillMaxWidth()
         )
 
         Button (
-            onClick = { },
+            onClick = { onConcatenarClick(novaPalavra) },
             modifier = Modifier.fillMaxWidth().padding(top = 32.dp)
         ) {
             Text("Concatenar")
@@ -53,6 +55,8 @@ fun AddWordScreen(modifier: Modifier = Modifier) {
 @Composable
 fun AddWordScreenPreview() {
     Surface {
-        AddWordScreen(modifier = Modifier)
+        AddWordScreen(modifier = Modifier,
+            textoRecebido = "Olá mundo",
+            onConcatenarClick = {})
     }
 }

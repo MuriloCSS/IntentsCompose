@@ -18,7 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier,
+               palavraDevolvida: String = "",
+               onAdicionarClick: (String) -> Unit,) {
 
     var textoAtual by remember { mutableStateOf("") }
 
@@ -35,7 +37,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         )
 
         Button(
-            onClick = { },
+            onClick = {onAdicionarClick(textoAtual)},
             modifier = Modifier.fillMaxWidth().padding(top = 32.dp)
         ) {
             Text("Adicionar palavra")
@@ -54,6 +56,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 @Composable
 fun HomeScreenPreview() {
     Surface {
-        HomeScreen(modifier = Modifier)
+        HomeScreen(modifier = Modifier,
+            palavraDevolvida = "",
+            onAdicionarClick = {})
     }
 }
